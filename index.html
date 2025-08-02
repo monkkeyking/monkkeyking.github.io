@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Download Button</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .download-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 10px;
+        }
+        
+        .download-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        .download-btn.fetch {
+            background-color: #28a745;
+        }
+        
+        .download-btn.fetch:hover {
+            background-color: #1e7a2d;
+        }
+        
+        .download-btn:active {
+            transform: translateY(1px);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PDF Download Example</h1>
+        <p>Choose your preferred download method:</p>
+        <button class="download-btn" onclick="downloadPDF()">Download PDF (Direct Link)</button>
+        <button class="download-btn fetch" onclick="downloadPDFViaFetch()">Download PDF (Fetch & Blob)</button>
+        <div id="status" class="status"></div>
+    </div>
+
+    <script>
+        function downloadPDF() {
+            const pdfUrl = 'https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf';
+            const fileName = 'sample-local-pdf.pdf';
+            
+            try {
+                // Create a temporary anchor element
+                const link = document.createElement('a');
+                
+                // Set the href to the PDF URL
+                link.href = pdfUrl;
+                
+                // Set the download attribute with desired filename
+                link.download = fileName;
+                
+                // Add the link to the document (required for some browsers)
+ 
+                
+                // Programmatically click the link to trigger download
+                link.click();
+                
+                // Clean up by removing the link from the document
+
+                // Show success message
+                showStatus('Download started successfully! (Direct Link Method)', 'success');
+                
+            } catch (error) {
+                // Show error message if something goes wrong
+                showStatus('Error starting download: ' + error.message, 'error');
+                console.error('Download error:', error);
+            }
+        }
+        
+        async function downloadPDFViaFetch() {
+            const pdfUrl = 'https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf';
+            const fileName = 'sample-local-pdf-blob.pdf';
+            
+            try {
+                // Show loading message
+                showStatus('Fetching PDF file...', 'success');
+                
+                // Fetch the PDF file
+                const response = await fetch(pdfUrl);
+                
+                // Check if the request was successful
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                // Convert response to blob
+                const blob = await response.blob();
+                
+                // Create a blob URL
+                const blobUrl = URL.createObjectURL(blob);
+                
+                // Create a temporary anchor element
+                const link = document.createElement('a');
+                
+                // Set the href to the blob URL
+                link.href = blobUrl;
+                
+                // Set the download attribute with desired filename
+                link.download = fileName;
+                
+                // Add the link to the document
+                document.body.appendChild(link);
+                
+                // Programmatically click the link to trigger download
+                link.click();
+                
+                // Clean up by removing the link and revoking the blob URL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(blobUrl);
+                
+                // Show success message
+                showStatus('Download completed successfully! (Fetch & Blob Method)', 'success');
+                
+            } catch (error) {
+                // Show error message if something goes wrong
+                showStatus('Error downloading file: ' + error.message, 'error');
+                console.error('Fetch download error:', error);
+            }
+        }
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+            
+            // Hide the status message after 3 seconds
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
