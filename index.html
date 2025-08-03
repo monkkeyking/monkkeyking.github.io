@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Download Button</title>
+    <script src="https://unpkg.com/webtonative@1.0.56/webtonative.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -47,6 +48,14 @@
             background-color: #1e7a2d;
         }
         
+        .download-btn.wtn {
+            background-color: #6f42c1;
+        }
+        
+        .download-btn.wtn:hover {
+            background-color: #5a2d91;
+        }
+        
         .download-btn:active {
             transform: translateY(1px);
         }
@@ -82,6 +91,7 @@
         <p>Choose your preferred download method:</p>
         <button class="download-btn" onclick="downloadPDF()">Download PDF (Direct Link)</button>
         <button class="download-btn fetch" onclick="downloadPDFViaFetch()">Download PDF (Fetch & Blob)</button>
+        <button class="download-btn wtn" onclick="downloadPDFViaWTN()">Download PDF (WTN Lib)</button>
         <div id="status" class="status"></div>
     </div>
 
@@ -166,6 +176,30 @@
                 // Show error message if something goes wrong
                 showStatus('Error downloading file: ' + error.message, 'error');
                 console.error('Fetch download error:', error);
+            }
+        }
+        
+        function downloadPDFViaWTN() {
+            const pdfUrl = 'https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf';
+            const fileName = 'sample-local-pdf-wtn.pdf';
+            
+            try {
+                // Show loading message
+                showStatus('Downloading via WTN library...', 'success');
+                
+                // Use WTN library to download the file
+                window.WTN.downloadBlobFile({
+                    fileName: fileName,
+                    downloadUrl: pdfUrl
+                });
+                
+                // Show success message
+                showStatus('Download initiated successfully! (WTN Library Method)', 'success');
+                
+            } catch (error) {
+                // Show error message if something goes wrong
+                showStatus('Error with WTN download: ' + error.message, 'error');
+                console.error('WTN download error:', error);
             }
         }
         
