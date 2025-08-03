@@ -56,6 +56,14 @@
             background-color: #5a2d91;
         }
         
+        .download-btn.iframe {
+            background-color: #fd7e14;
+        }
+        
+        .download-btn.iframe:hover {
+            background-color: #e85d04;
+        }
+        
         .download-btn:active {
             transform: translateY(1px);
         }
@@ -92,7 +100,11 @@
         <button class="download-btn" onclick="downloadPDF()">Download PDF (Direct Link)</button>
         <button class="download-btn fetch" onclick="downloadPDFViaFetch()">Download PDF (Fetch & Blob)</button>
         <button class="download-btn wtn" onclick="downloadPDFViaWTN()">Download PDF (WTN Lib)</button>
+        <button class="download-btn iframe" onclick="downloadPDFViaIframe()">Download PDF (Iframe Method)</button>
         <div id="status" class="status"></div>
+        
+        <!-- Hidden iframe for download -->
+        <iframe style="display:none;" name="iframe_download"></iframe>
     </div>
 
     <script>
@@ -200,6 +212,41 @@
                 // Show error message if something goes wrong
                 showStatus('Error with WTN download: ' + error.message, 'error');
                 console.error('WTN download error:', error);
+            }
+        }
+        
+        function downloadPDFViaIframe() {
+            const pdfUrl = 'https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf';
+            
+            try {
+                // Show loading message
+                showStatus('Downloading via iframe method...', 'success');
+                
+                // Create a temporary anchor element
+                const link = document.createElement('a');
+                
+                // Set the href to the PDF URL
+                link.href = pdfUrl;
+                
+                // Set the target to the hidden iframe
+                link.target = 'iframe_download';
+                
+                // Add the link to the document
+                document.body.appendChild(link);
+                
+                // Programmatically click the link to trigger download
+                link.click();
+                
+                // Clean up by removing the link from the document
+                document.body.removeChild(link);
+                
+                // Show success message
+                showStatus('Download started successfully! (Iframe Method)', 'success');
+                
+            } catch (error) {
+                // Show error message if something goes wrong
+                showStatus('Error with iframe download: ' + error.message, 'error');
+                console.error('Iframe download error:', error);
             }
         }
         
