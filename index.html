@@ -64,6 +64,14 @@
             background-color: #e85d04;
         }
         
+        .download-btn.force {
+            background-color: #dc3545;
+        }
+        
+        .download-btn.force:hover {
+            background-color: #a71e2a;
+        }
+        
         .download-btn:active {
             transform: translateY(1px);
         }
@@ -72,28 +80,12 @@
             color: #333;
             margin-bottom: 20px;
         }
-        
-        .status {
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 5px;
-            display: none;
-        }
-        
-        .status.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .status.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
     </style>
 </head>
 <body>
+    <!-- Hidden iframe for download -->
+    <iframe style="display:none;" name="iframe_download"></iframe>
+    
     <div class="container">
         <h1>PDF Download Example</h1>
         <p>Choose your preferred download method:</p>
@@ -101,7 +93,8 @@
         <button class="download-btn fetch" onclick="downloadPDFViaFetch()">Download PDF (Fetch & Blob)</button>
         <button class="download-btn wtn" onclick="downloadPDFViaWTN()">Download PDF (WTN Lib)</button>
         <button class="download-btn iframe" onclick="downloadPDFViaIframe()">Download PDF (Iframe Method)</button>
-        <div id="status" class="status"></div>
+        <button class="download-btn force" onclick="downloadPDFViaForceBlob()">Download PDF (Force Blob)</button>
+    </div>
         
         <!-- Hidden iframe for download -->
         <iframe style="display:none;" name="iframe_download"></iframe>
@@ -112,32 +105,17 @@
             const pdfUrl = 'https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf?wtn-download-file=true';
             const fileName = 'sample-local-pdf.pdf';
             
-            try {
-                // Create a temporary anchor element
-                const link = document.createElement('a');
-                
-                // Set the href to the PDF URL
-                link.href = pdfUrl;
-                
-                // Set the download attribute with desired filename
-                link.download = fileName;
-                
-                // Add the link to the document (required for some browsers)
- 
-                
-                // Programmatically click the link to trigger download
-                link.click();
-                
-                // Clean up by removing the link from the document
-
-                // Show success message
-                showStatus('Download started successfully! (Direct Link Method)', 'success');
-                
-            } catch (error) {
-                // Show error message if something goes wrong
-                showStatus('Error starting download: ' + error.message, 'error');
-                console.error('Download error:', error);
-            }
+            // Create a temporary anchor element
+            const link = document.createElement('a');
+            
+            // Set the href to the PDF URL
+            link.href = pdfUrl;
+            
+            // Set the download attribute with desired filename
+            link.download = fileName;
+            
+            // Programmatically click the link to trigger download
+            link.click();
         }
         
         async function downloadPDFViaFetch() {
@@ -145,9 +123,6 @@
             const fileName = 'sample-local-pdf-blob.pdf';
             
             try {
-                // Show loading message
-                showStatus('Fetching PDF file...', 'success');
-                
                 // Fetch the PDF file
                 const response = await fetch(pdfUrl);
                 
@@ -181,12 +156,7 @@
                 document.body.removeChild(link);
                 URL.revokeObjectURL(blobUrl);
                 
-                // Show success message
-                showStatus('Download completed successfully! (Fetch & Blob Method)', 'success');
-                
             } catch (error) {
-                // Show error message if something goes wrong
-                showStatus('Error downloading file: ' + error.message, 'error');
                 console.error('Fetch download error:', error);
             }
         }
@@ -195,41 +165,65 @@
             const pdfUrl = 'https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf';
             const fileName = 'sample-local-pdf-wtn.pdf';
             
-            try {
-                // Show loading message
-                showStatus('Downloading via WTN library...', 'success');
-                
-                // Use WTN library to download the file
-                window.WTN.downloadBlobFile({
-                    fileName: fileName,
-                    downloadUrl: pdfUrl
-                });
-                
-                // Show success message
-                showStatus('Download initiated successfully! (WTN Library Method)', 'success');
-                
-            } catch (error) {
-                // Show error message if something goes wrong
-                showStatus('Error with WTN download: ' + error.message, 'error');
-                console.error('WTN download error:', error);
-            }
+            // Use WTN library to download the file
+            window.WTN.downloadBlobFile({
+                fileName: fileName,
+                downloadUrl: pdfUrl
+            });
         }
         
         function downloadPDFViaIframe() {
             const pdfUrl = 'https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf';
             
+            // Create a temporary anchor element
+            const link = document.createElement('a');
+            
+            // Set the href to the PDF URL
+            link.href = pdfUrl;
+            
+            // Set the target to the hidden iframe
+            link.target = 'iframe_download';
+            
+            // Add the link to the document
+            document.body.appendChild(link);
+            
+            // Programmatically click the link to trigger download
+            link.click();
+            
+            // Clean up by removing the link from the document
+            document.body.removeChild(link);
+        }
+        
+        async function downloadPDFViaForceBlob() {
+            const pdfUrl = 'https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf';
+            const fileName = 'sample-local-pdf-forced.pdf';
+            
             try {
-                // Show loading message
-                showStatus('Downloading via iframe method...', 'success');
+                // Fetch the PDF file
+                const response = await fetch(pdfUrl);
+                
+                // Check if the request was successful
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                // Get the raw data
+                const arrayBuffer = await response.arrayBuffer();
+                
+                // Create a new blob with application/octet-stream MIME type to force download
+                const blob = new Blob([arrayBuffer], { type: 'application/octet-stream' });
+                
+                // Create a blob URL
+                const blobUrl = URL.createObjectURL(blob);
                 
                 // Create a temporary anchor element
                 const link = document.createElement('a');
                 
-                // Set the href to the PDF URL
-                link.href = pdfUrl;
+                // Set the href to the blob URL
+                link.href = blobUrl;
                 
-                // Set the target to the hidden iframe
-                link.target = 'iframe_download';
+                // Set the download attribute with desired filename
+                link.download = fileName;
                 
                 // Add the link to the document
                 document.body.appendChild(link);
@@ -237,16 +231,12 @@
                 // Programmatically click the link to trigger download
                 link.click();
                 
-                // Clean up by removing the link from the document
+                // Clean up by removing the link and revoking the blob URL
                 document.body.removeChild(link);
-                
-                // Show success message
-                showStatus('Download started successfully! (Iframe Method)', 'success');
+                URL.revokeObjectURL(blobUrl);
                 
             } catch (error) {
-                // Show error message if something goes wrong
-                showStatus('Error with iframe download: ' + error.message, 'error');
-                console.error('Iframe download error:', error);
+                console.error('Force blob download error:', error);
             }
         }
         
