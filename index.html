@@ -24,6 +24,23 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
+        .navigator-info {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .navigator-info h3 {
+            margin-top: 0;
+            color: #495057;
+            font-family: Arial, sans-serif;
+        }
+        
         .download-btn {
             background-color: #007bff;
             color: white;
@@ -88,6 +105,12 @@
     
     <div class="container">
         <h1>PDF Download Example</h1>
+        
+        <div class="navigator-info">
+            <h3>Navigator Information:</h3>
+            <div id="navigator-data">Loading...</div>
+        </div>
+        
         <p>Choose your preferred download method:</p>
         <button class="download-btn" onclick="downloadPDF()">Download PDF (Direct Link)</button>
         <button class="download-btn fetch" onclick="downloadPDFViaFetch()">Download PDF (Fetch & Blob)</button>
@@ -95,17 +118,31 @@
         <button class="download-btn iframe" onclick="downloadPDFViaIframe()">Download PDF (Iframe Method)</button>
         <button class="download-btn force" onclick="downloadPDFViaForceBlob()">Download PDF (Force Blob)</button>
     </div>
-        
-        <!-- Hidden iframe for download -->
-        <iframe style="display:none;" name="iframe_download"></iframe>
-    </div>
 
     <script>
-        console.log('platform', window.navigator.platform)
-        console.log('points', window.navigator.maxTouchPoints)
-           console.log('venbdor', window.navigator.venbdor)
-    </script>
-    <script>
+        // Display navigator information on the page
+        function displayNavigatorInfo() {
+            const navigatorDiv = document.getElementById('navigator-data');
+            const platform = window.navigator.platform;
+            const maxTouchPoints = window.navigator.maxTouchPoints;
+            const vendor = window.navigator.vendor; // Fixed typo from 'venbdor'
+            
+            // Log to console (as in original code)
+            console.log('platform', platform);
+            console.log('points', maxTouchPoints);
+            console.log('vendor', vendor);
+            
+            // Display on page
+            navigatorDiv.innerHTML = `
+                <strong>Platform:</strong> ${platform}<br>
+                <strong>Max Touch Points:</strong> ${maxTouchPoints}<br>
+                <strong>Vendor:</strong> ${vendor || 'undefined'}
+            `;
+        }
+        
+        // Call the function when page loads
+        window.addEventListener('DOMContentLoaded', displayNavigatorInfo);
+        
         function downloadPDF() {
             const pdfUrl = 'https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf?wtn-download-file=true';
             const fileName = 'sample-local-pdf.pdf';
