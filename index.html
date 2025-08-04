@@ -111,12 +111,12 @@
             <div id="navigator-data">Loading...</div>
         </div>
         
-        <p>Choose your preferred download method:</p>
+        <!-- <p>Choose your preferred download method:</p>
         <button class="download-btn" onclick="downloadPDF()">Download PDF (Direct Link)</button>
         <button class="download-btn fetch" onclick="downloadPDFViaFetch()">Download PDF (Fetch & Blob)</button>
         <button class="download-btn wtn" onclick="downloadPDFViaWTN()">Download PDF (WTN Lib)</button>
         <button class="download-btn iframe" onclick="downloadPDFViaIframe()">Download PDF (Iframe Method)</button>
-        <button class="download-btn force" onclick="downloadPDFViaForceBlob()">Download PDF (Force Blob)</button>
+        <button class="download-btn force" onclick="downloadPDFViaForceBlob()">Download PDF (Force Blob)</button> -->
     </div>
 
     <script>
@@ -126,6 +126,7 @@
             const platform = window.navigator.platform;
             const maxTouchPoints = window.navigator.maxTouchPoints;
             const vendor = window.navigator.vendor; // Fixed typo from 'venbdor'
+            const uagent = window.navigator.userAgent; // Fixed typo from 'venbdor'
             
             // Log to console (as in original code)
             console.log('platform', platform);
@@ -136,6 +137,7 @@
             navigatorDiv.innerHTML = `
                 <strong>Platform:</strong> ${platform}<br>
                 <strong>Max Touch Points:</strong> ${maxTouchPoints}<br>
+                <strong>useragent:</strong> ${uagent}<br>
                 <strong>Vendor:</strong> ${vendor || 'undefined'}
             `;
         }
