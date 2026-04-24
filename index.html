@@ -703,7 +703,145 @@ body::before {
     letter-spacing: 2px;
 }
 
-/* ============ MOBILE ============ */
+/* ============ CONTROLS (reset + sound) ============ */
+.controls {
+    position: absolute;
+    top: 14px;
+    left: 58px;
+    display: flex;
+    gap: 6px;
+    z-index: 3;
+}
+
+.ctrl-btn {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(40, 22, 14, 0.08);
+    border: 1px solid var(--gold-dim);
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-size: 17px;
+    font-family: var(--serif);
+    user-select: none;
+    transition: all 0.2s ease;
+    overflow: hidden;
+}
+
+.ctrl-btn:hover {
+    background: rgba(139, 26, 26, 0.15);
+    border-color: var(--red);
+    color: var(--red-dark);
+    transform: translateY(-1px);
+}
+
+.ctrl-btn.muted {
+    opacity: 0.55;
+}
+
+.ctrl-btn.muted::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top right,
+        transparent calc(50% - 1px),
+        var(--red-dark) calc(50% - 1px),
+        var(--red-dark) calc(50% + 1px),
+        transparent calc(50% + 1px)
+    );
+    pointer-events: none;
+}
+
+/* ============ XP TALLY ============ */
+.xp-tally {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    font-family: var(--display);
+    color: var(--gold-dim);
+    font-size: 12px;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.xp-tally-value {
+    color: var(--red-dark);
+    font-size: 14px;
+    transition: transform 0.3s ease, color 0.3s ease;
+    display: inline-block;
+}
+
+.xp-tally-value.bump {
+    animation: tally-bump 0.55s ease;
+}
+
+@keyframes tally-bump {
+    0%, 100% { transform: scale(1); color: var(--red-dark); }
+    40%      { transform: scale(1.4); color: var(--gold-bright); text-shadow: 0 0 12px var(--gold-bright); }
+}
+
+/* ============ VICTORY BANNER ============ */
+.victory-banner {
+    margin-top: 28px;
+    padding: 22px 18px;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.22) 0%, rgba(139, 26, 26, 0.14) 100%);
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 0 1px var(--parchment), 0 0 30px rgba(244, 215, 114, 0.5);
+    animation: victory-glow 2.4s ease infinite alternate;
+    overflow: hidden;
+    position: relative;
+}
+
+@keyframes victory-glow {
+    from { box-shadow: 0 0 0 1px var(--parchment), 0 0 24px rgba(244, 215, 114, 0.35); }
+    to   { box-shadow: 0 0 0 1px var(--parchment), 0 0 50px rgba(244, 215, 114, 0.8); }
+}
+
+.victory-title {
+    font-family: var(--display);
+    color: var(--red-dark);
+    font-size: clamp(20px, 4vw, 30px);
+    letter-spacing: 5px;
+    margin-bottom: 6px;
+    text-shadow: 0 0 12px rgba(244, 215, 114, 0.6);
+}
+
+.victory-sub {
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.parchment.victory {
+    animation: parchment-pulse 3.2s ease infinite alternate;
+}
+
+@keyframes parchment-pulse {
+    from {
+        box-shadow:
+            0 0 40px rgba(212, 175, 55, 0.4),
+            0 0 0 4px var(--bg-dark),
+            0 0 0 6px var(--gold),
+            0 20px 60px rgba(0, 0, 0, 0.6),
+            inset 0 0 80px rgba(139, 90, 40, 0.25);
+    }
+    to {
+        box-shadow:
+            0 0 90px rgba(244, 215, 114, 0.75),
+            0 0 0 4px var(--bg-dark),
+            0 0 0 6px var(--gold-bright),
+            0 20px 60px rgba(0, 0, 0, 0.6),
+            inset 0 0 80px rgba(139, 90, 40, 0.25);
+    }
+}
+
+/* ============ MOBILE (≤ 560px) ============ */
 @media (max-width: 560px) {
     .parchment { padding: 44px 24px 32px; }
     .gate { padding: 40px 24px; }
@@ -711,6 +849,85 @@ body::before {
     .seal-inner { font-size: 28px; }
     .torch { width: 80px; }
     .codex { padding: 20px 18px; }
+    .controls { top: 12px; left: 50px; }
+}
+
+/* ============ SMALL PHONE (≤ 420px) ============ */
+@media (max-width: 420px) {
+    .screen { padding: 24px 10px; }
+    .parchment {
+        padding: 40px 16px 26px;
+        border-width: 2px;
+    }
+    .gate { padding: 32px 18px; }
+    .gate-ornament { letter-spacing: 8px; font-size: 18px; margin-bottom: 22px; }
+    .gate-ornament.bottom { margin-top: 22px; }
+    .gate-title { letter-spacing: 2px; margin-bottom: 10px; }
+    .gate-subtitle { font-size: 14px; margin-bottom: 22px; }
+    .rune-input { padding: 12px 14px; gap: 8px; }
+    .rune-input input { font-size: 15px; letter-spacing: 2px; }
+    .btn-rpg { padding: 10px 18px; font-size: 12px; letter-spacing: 2px; }
+    .btn-large { font-size: 13px; padding: 12px 22px; }
+
+    .seal { right: 12px; top: -22px; width: 48px; height: 48px; border-width: 2px; }
+    .seal-inner { font-size: 22px; }
+    .torch { width: 52px; opacity: 0.45; }
+
+    .corner { font-size: 18px; }
+    .corner.tl { top: 8px; left: 12px; }
+    .corner.tr { top: 8px; right: 12px; }
+    .corner.bl { bottom: 8px; left: 12px; }
+    .corner.br { bottom: 8px; right: 12px; }
+
+    .scroll-title { font-size: 24px; letter-spacing: 1px; line-height: 1.15; }
+    .scroll-subtitle { font-size: 13px; margin-top: 10px; }
+
+    .divider { margin: 22px 0; letter-spacing: 2px; font-size: 14px; }
+    .divider.small { margin: 18px 0; font-size: 16px; }
+
+    .stat-grid { gap: 10px; grid-template-columns: 1fr; }
+    .stat { padding: 12px 14px; }
+    .stat-label { font-size: 11px; letter-spacing: 2px; }
+    .stat-value { font-size: 14px; }
+
+    .quest-panel { padding: 18px 16px; }
+    .quest-header { flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .quest-label { font-size: 11px; letter-spacing: 2px; }
+    .quest-counter { font-size: 13px; letter-spacing: 2px; }
+    .quest-value { letter-spacing: 0.5px; }
+    .quest-place { font-size: 13px; padding: 6px 10px; }
+    .quest-hint { font-size: 12px; margin-top: 12px; }
+    .xp-bar { height: 16px; margin-top: 14px; }
+    .xp-text { font-size: 10px; letter-spacing: 2px; }
+
+    .side-quests { padding: 16px 12px; border-left-width: 2px; border-right-width: 2px; }
+    .side-quests-header { flex-wrap: wrap; gap: 6px 10px; margin-bottom: 12px; }
+    .side-quests-title { font-size: 11px; letter-spacing: 2px; }
+    .side-quests-counter { font-size: 12px; letter-spacing: 1px; }
+
+    .side-quest { flex-wrap: wrap; padding: 9px 10px; gap: 4px 10px; }
+    .sq-check { order: 1; font-size: 20px; width: 20px; }
+    .sq-text { order: 2; flex: 1 1 calc(100% - 36px); font-size: 13px; min-width: 0; }
+    .sq-reward { order: 3; flex-basis: 100%; text-align: right; font-size: 10px; letter-spacing: 1px; margin-top: 2px; }
+
+    .ctrl-btn { width: 30px; height: 30px; font-size: 15px; }
+    .controls { top: 8px; left: 40px; gap: 4px; }
+
+    .victory-banner { padding: 18px 12px; margin-top: 22px; }
+    .victory-title { letter-spacing: 3px; }
+    .victory-sub { font-size: 12px; }
+
+    .scroll-footer { margin-top: 28px; font-size: 12px; letter-spacing: 1px; }
+}
+
+/* ============ EXTRA TIGHT (≤ 360px) ============ */
+@media (max-width: 360px) {
+    .parchment { padding: 36px 12px 22px; }
+    .scroll-title { font-size: 22px; }
+    .seal { right: 8px; width: 44px; height: 44px; }
+    .seal-inner { font-size: 20px; }
+    .controls { top: 6px; left: 36px; }
+    .stat-value { font-size: 13px; }
 }
     </style>
 </head>
@@ -746,11 +963,16 @@ body::before {
 
     <!-- ============ СВИТОК КВЕСТА ============ -->
     <div id="party-screen" class="screen hidden">
-        <div class="parchment">
+        <div class="parchment" id="parchment">
             <div class="corner tl">❦</div>
             <div class="corner tr">❦</div>
             <div class="corner bl">❦</div>
             <div class="corner br">❦</div>
+
+            <div class="controls">
+                <button type="button" class="ctrl-btn" id="sound-toggle" title="Звук" aria-label="Переключить звук">♪</button>
+                <button type="button" class="ctrl-btn" id="reset-btn" title="Сбросить прогресс" aria-label="Сбросить прогресс">⟲</button>
+            </div>
 
             <div class="seal">
                 <div class="seal-inner">⚜</div>
@@ -799,7 +1021,10 @@ body::before {
             <div class="side-quests">
                 <div class="side-quests-header">
                     <span class="side-quests-title">◇ ВНЕВРЕМЕННЫЕ КВЕСТЫ</span>
-                    <span class="side-quests-counter" id="side-counter">0 / 3</span>
+                    <span class="xp-tally">
+                        ⚡ <span class="xp-tally-value" id="xp-tally">0</span> XP
+                    </span>
+                    <span class="side-quests-counter" id="side-counter">0 / 5</span>
                 </div>
                 <div class="side-quest-list" id="side-quest-list">
                     <div class="side-quest" tabindex="0" role="button" data-id="photos">
@@ -807,27 +1032,33 @@ body::before {
                         <span class="sq-text">запечатлеть пати на картине</span>
                         <span class="sq-reward">+100 К ВОСПОМ.</span>
                     </div>
-                    <div class="side-quest" tabindex="0" role="button" data-id="bubble">
+                    <div class="side-quest" tabindex="0" role="button" data-id="bubble-tea">
                         <span class="sq-check">☐</span>
                         <span class="sq-text">испить легендарного чая с шариками</span>
                         <span class="sq-reward">+50 К ЭНЕРГ.</span>
                     </div>
-                      <div class="side-quest" tabindex="0" role="button" data-id="bubble">
+                    <div class="side-quest" tabindex="0" role="button" data-id="energy-potion">
                         <span class="sq-check">☐</span>
                         <span class="sq-text">выпить зелье энергии</span>
-                        <span class="sq-reward">+70 К ЭНЕРГ .</span>
+                        <span class="sq-reward">+70 К ЭНЕРГ.</span>
                     </div>
-                    <div class="side-quest" tabindex="0" role="button" data-id="manga">
+                    <div class="side-quest" tabindex="0" role="button" data-id="chig-shop">
                         <span class="sq-check">☐</span>
                         <span class="sq-text">изучить товары в волшебной лавке ЧиГ</span>
                         <span class="sq-reward">+30 К НАСТР.</span>
                     </div>
-                                        <div class="side-quest" tabindex="0" role="button" data-id="manga">
+                    <div class="side-quest" tabindex="0" role="button" data-id="cdm-shop">
                         <span class="sq-check">☐</span>
-                        <span class="sq-text">оценить товары во дворце радотсти ЦДМ</span>
+                        <span class="sq-text">оценить товары во дворце радости ЦДМ</span>
                         <span class="sq-reward">+30 К НАСТР.</span>
                     </div>
                 </div>
+            </div>
+
+            <!-- Баннер победы -->
+            <div class="victory-banner hidden" id="victory-banner">
+                <div class="victory-title">⚔ ПОБЕДА ⚔</div>
+                <div class="victory-sub">— все квесты покорены, герои! —</div>
             </div>
 
             <div class="divider small">❖</div>
@@ -939,8 +1170,86 @@ form.addEventListener('submit', (e) => {
     }
 });
 
+// ========== STORAGE ==========
+const STORAGE_KEY = 'career-rpg:v1';
+
+function loadState() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { mainIndex: 0, side: {}, muted: false };
+        const parsed = JSON.parse(raw);
+        return {
+            mainIndex: typeof parsed.mainIndex === 'number' ? parsed.mainIndex : 0,
+            side: parsed.side && typeof parsed.side === 'object' ? parsed.side : {},
+            muted: !!parsed.muted
+        };
+    } catch {
+        return { mainIndex: 0, side: {}, muted: false };
+    }
+}
+
+function saveState() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch {}
+}
+
+const state = loadState();
+
+// ========== SOUND ==========
+let audioCtx = null;
+function getCtx() {
+    if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) audioCtx = new AC();
+    }
+    return audioCtx;
+}
+
+function playTone(freq, duration = 0.12, type = 'sine', gain = 0.06) {
+    if (state.muted) return;
+    const ctx = getCtx();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') ctx.resume();
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    g.gain.setValueAtTime(gain, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+    osc.connect(g).connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + duration);
+}
+
+const sfx = {
+    advance: () => { playTone(523, 0.09, 'triangle'); setTimeout(() => playTone(784, 0.14, 'triangle'), 70); },
+    check:   () => { playTone(880, 0.08, 'triangle'); setTimeout(() => playTone(1318, 0.12, 'triangle'), 60); },
+    uncheck: () => { playTone(440, 0.12, 'sine', 0.04); },
+    victory: () => {
+        [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => playTone(f, 0.2, 'triangle', 0.07), i * 110));
+    },
+    reset: () => { playTone(200, 0.25, 'sawtooth', 0.04); }
+};
+
+const soundToggle = document.getElementById('sound-toggle');
+
+function renderSoundToggle() {
+    soundToggle.classList.toggle('muted', state.muted);
+    soundToggle.textContent = state.muted ? '♪' : '♪';
+    soundToggle.title = state.muted ? 'Звук выключен' : 'Звук включён';
+}
+
+soundToggle.addEventListener('click', () => {
+    state.muted = !state.muted;
+    saveState();
+    renderSoundToggle();
+    if (!state.muted) sfx.check();
+});
+
+renderSoundToggle();
+
 // ========== QUEST PANEL ==========
-// Впиши место в поле `place` для каждого квеста
 const quests = [
     { name: 'покорить тортик',                       place: 'дом' },
     { name: 'изучить архитектуру нашего царства',    place: 'музей архитектуры им. щусева' },
@@ -959,10 +1268,10 @@ const questCounter = document.getElementById('quest-counter');
 const xpFill = document.getElementById('xp-fill');
 const questHint = document.getElementById('quest-hint');
 
-let questIndex = 0;
+if (state.mainIndex < 0 || state.mainIndex >= quests.length) state.mainIndex = 0;
 
 function renderQuest() {
-    const q = quests[questIndex];
+    const q = quests[state.mainIndex];
     questValue.textContent = q.name;
 
     if (q.place && q.place.trim()) {
@@ -973,18 +1282,20 @@ function renderQuest() {
         questPlaceText.classList.add('empty');
     }
 
-    questCounter.textContent = `${ROMAN[questIndex]} / ${ROMAN[quests.length - 1]}`;
-    xpFill.style.width = `${((questIndex + 1) / quests.length) * 100}%`;
-    questHint.textContent = questIndex === quests.length - 1
+    questCounter.textContent = `${ROMAN[state.mainIndex]} / ${ROMAN[quests.length - 1]}`;
+    xpFill.style.width = `${((state.mainIndex + 1) / quests.length) * 100}%`;
+    questHint.textContent = state.mainIndex === quests.length - 1
         ? '✦ путь завершён... коснись, дабы начать вновь'
         : '⚔ коснись свитка, дабы продолжить путь';
 }
 
 function advanceQuest() {
+    sfx.advance();
     questValue.classList.add('swap');
     questPlace.classList.add('swap');
     setTimeout(() => {
-        questIndex = (questIndex + 1) % quests.length;
+        state.mainIndex = (state.mainIndex + 1) % quests.length;
+        saveState();
         renderQuest();
         questValue.classList.remove('swap');
         questPlace.classList.remove('swap');
@@ -1004,27 +1315,97 @@ renderQuest();
 // ========== SIDE QUESTS ==========
 const sideQuests = document.querySelectorAll('.side-quest');
 const sideCounter = document.getElementById('side-counter');
+const xpTallyEl = document.getElementById('xp-tally');
+const victoryBanner = document.getElementById('victory-banner');
+const parchmentEl = document.getElementById('parchment');
+
+function parseReward(el) {
+    const text = el.querySelector('.sq-reward')?.textContent || '';
+    const m = text.match(/([+\-]?\d+)/);
+    return m ? parseInt(m[1], 10) : 0;
+}
+
+function formatTs(ts) {
+    const d = new Date(ts);
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mm = String(d.getMinutes()).padStart(2, '0');
+    return `покорено в ${hh}:${mm}`;
+}
+
+function computeTotalXp() {
+    let total = 0;
+    sideQuests.forEach((el) => {
+        const id = el.dataset.id;
+        if (state.side[id]?.done) total += parseReward(el);
+    });
+    return total;
+}
+
+function renderXpTally(bump = false) {
+    const total = computeTotalXp();
+    xpTallyEl.textContent = total;
+    if (bump) {
+        xpTallyEl.classList.remove('bump');
+        void xpTallyEl.offsetWidth;
+        xpTallyEl.classList.add('bump');
+    }
+}
+
+let victoryInitialized = false;
+function renderVictory() {
+    const all = Array.from(sideQuests).every((el) => state.side[el.dataset.id]?.done);
+    if (all) {
+        if (victoryInitialized && victoryBanner.classList.contains('hidden')) sfx.victory();
+        victoryBanner.classList.remove('hidden');
+        parchmentEl.classList.add('victory');
+    } else {
+        victoryBanner.classList.add('hidden');
+        parchmentEl.classList.remove('victory');
+    }
+    victoryInitialized = true;
+}
 
 function updateSideCounter() {
-    const done = document.querySelectorAll('.side-quest.done').length;
+    const done = Array.from(sideQuests).filter((el) => state.side[el.dataset.id]?.done).length;
     sideCounter.textContent = `${done} / ${sideQuests.length}`;
 }
 
-function toggleSideQuest(el) {
+function applySideQuestState(el, animate = false) {
+    const id = el.dataset.id;
+    const entry = state.side[id];
     const check = el.querySelector('.sq-check');
-    const wasDone = el.classList.contains('done');
-    el.classList.toggle('done');
-    check.textContent = wasDone ? '☐' : '☑';
+    const done = !!entry?.done;
 
-    if (!wasDone) {
+    el.classList.toggle('done', done);
+    check.textContent = done ? '☑' : '☐';
+    el.title = done && entry.ts ? formatTs(entry.ts) : '';
+
+    if (animate && done) {
         el.classList.remove('just-done');
         void el.offsetWidth;
         el.classList.add('just-done');
     }
+}
+
+function toggleSideQuest(el) {
+    const id = el.dataset.id;
+    const wasDone = !!state.side[id]?.done;
+    if (wasDone) {
+        delete state.side[id];
+        sfx.uncheck();
+    } else {
+        state.side[id] = { done: true, ts: Date.now() };
+        sfx.check();
+    }
+    saveState();
+    applySideQuestState(el, !wasDone);
     updateSideCounter();
+    renderXpTally(true);
+    renderVictory();
 }
 
 sideQuests.forEach((el) => {
+    applySideQuestState(el);
     el.addEventListener('click', () => toggleSideQuest(el));
     el.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -1032,6 +1413,25 @@ sideQuests.forEach((el) => {
             toggleSideQuest(el);
         }
     });
+});
+
+updateSideCounter();
+renderXpTally();
+renderVictory();
+
+// ========== RESET ==========
+const resetBtn = document.getElementById('reset-btn');
+resetBtn.addEventListener('click', () => {
+    if (!confirm('Сбросить весь прогресс хроники?')) return;
+    state.mainIndex = 0;
+    state.side = {};
+    saveState();
+    sfx.reset();
+    renderQuest();
+    sideQuests.forEach((el) => applySideQuestState(el));
+    updateSideCounter();
+    renderXpTally(true);
+    renderVictory();
 });
     </script>
 </body>
